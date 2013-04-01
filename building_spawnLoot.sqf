@@ -1,0 +1,761 @@
+private["_obj","_type","_config","_positions","_iPos","_nearBy","_itemType","_itemTypes","_itemChances","_lootChance","_weights","_cntWeights","_index","_LootClass"];
+
+_obj =   		_this select 0;
+_type =   	typeOf _obj;
+_config =   	configFile >> "CfgBuildingLoot" >> _type;
+_positions =  [] + getArray (_config >> "lootPos");
+//_itemTypes =  [] + getArray (_config >> "itemType"); // Default System
+_lootChance =  getNumber (_config >> "lootChance");
+
+//------------------//
+//CUSTOM LOOT SPAWNS//
+//------------------//
+_itemTypes = []; //Initialise array
+_itemChance = []; //Initialise array
+
+diag_log "SPAWNING WITH CUSTOM LOOT";//Remove This line after testing
+
+switch (_type) do { //Assign building classes
+    case "Church": {_LootClass = "Residential"; };
+  case "Baseball_DZ": {_LootClass = "Residential"; };
+    case "Land_dumruina_mini": {_LootClass = "Residential"; };
+    case "Land_statek_hl_bud": {_LootClass = "Residential"; };
+    case "LAND_HouseBlock_D1_ex1": {_LootClass = "Residential"; };
+    case "LAND_HouseBlock_D1": {_LootClass = "Residential"; };
+    case "LAND_Zachytka": {_LootClass = "Military"; };
+    case "LAND_Tav_panelak": {_LootClass = "Residential"; };
+    case "LAND_skola": {_LootClass = "Residential"; };
+    case "LAND_shopping_sab5": {_LootClass = "Supermarket"; };
+    case "LAND_hockej_stadion": {_LootClass = "Residential"; };
+    case "LAND_konecna": {_LootClass = "Residential"; };
+    case "LAND_Big_Panelka": {_LootClass = "Residential"; };
+    case "LAND_small_Panelka": {_LootClass = "Residential"; };
+    case "Land_garaz": {_LootClass = "Industrial"; };
+    case "Land_Tav_Panelak3": {_LootClass = "Residential"; };
+    case "Land_Tav_Panelak2": {_LootClass = "Residential"; };
+    case "LAND_shopping_sab1": {_LootClass = "Supermarket"; };
+    case "Land_statek_brana": {_LootClass = "Farm"; };
+    case "Land_Statek_kulna": {_LootClass = "Farm"; };
+    case "LAND_Hotel": {_LootClass = "Residential"; };
+    case "LAND_domek05": {_LootClass = "Residential"; };
+    case "LAND_ZalChata": {_LootClass = "Residential"; };
+    case "LAND_hotel_rivera2": {_LootClass = "Residential"; };
+    case "LAND_hotel_rivera1": {_LootClass = "Residential"; };
+    case "LAND_Posta": {_LootClass = "Residential"; };
+    case "LAND_bus_depo": {_LootClass = "Industrial"; };
+    case "LAND_casino": {_LootClass = "Residential"; };
+    case "LAND_Parlament": {_LootClass = "Residential"; };  
+  case "LAND_Galerie": {_LootClass = "Residential"; }; 
+  case "LAND_Stojan_Bus": {_LootClass = "Residential"; }; 
+  case "LAND_dum_patrovy03": {_LootClass = "Residential"; }; 
+  case "LAND_Cinzak_long": {_LootClass = "Residential"; };
+  case "LAND_Cinzak_corner2": {_LootClass = "Residential"; };
+  case "LAND_Cinzak_long_centr": {LootClass = "Residential"; }; 
+  case "LAND_Cinzak_corner": {_LootClass = "Residential"; ";
+  case "LAND_Cinzak_long_double": {_LootClass = "Residential"; }; 
+  case "LAND_hospoda": {_LootClass = "Residential"; }; 
+  case "LAND_spital": {_LootClass = "Hospital"; };
+  case "LAND_Podloubi_double_low": {_LootClass = "Residential"; }; 
+  case "LAND_Podloubi_End_Low_1": {_LootClass = "Residential"; };
+  case "LAND_Podloubi_End_Low_2": {_LootClass = "Residential"; };
+  case "LAND_water_pub": {_LootClass = "Residential"; };
+  case "LAND_Garaz_velka": {_LootClass = "Industrial"; }; 
+  case "LAND_Hotel_Marcomio": {_LootClass = "Residential"; };
+  case "LAND_shopping_sab2": {_LootClass = "Supermarket"; };
+  case "LAND_Nadrazi_sabina": {_LootClass = "Residential"; }; 
+  case "LAND_dum_patrovy06": {_LootClass = "Residential"; }; 
+  case "LAND_dum_mesto": {_LootClass = "Residential"; }; 
+  case "Land_leseni2x": {_LootClass = "Residential"; }; 
+  case "LAND_Autosalon": {_LootClass = "Residential"; }; 
+  case "LAND_Banka": {_LootClass = "Residential"; }; 
+  case "LAND_Muzeum": {_LootClass = "Residential"; }; 
+  case "Land_budova4_in": {_LootClass = "Military"; }; 
+  case "LAND_vokzal_big": {_LootClass = "Residential"; }; 
+  case "LAND_big_church": {_LootClass = "Residential"; }; 
+  case "LAND_Ruske_kolo": {_LootClass = "Residential"; }; 
+  case "LAND_Bufet": {_LootClass = "Residential"; }; 
+  case "LAND_Bus_Stojan_Bud": {_LootClass = "Residential"; }; 
+  case "LAND_Cinzak_roh2": {_LootClass = "Residential"; };
+  case "LAND_Cinzak_roh3": {_LootClass = "Residential"; }; 
+  case "LAND_Cinzak_trojuhlenik": {_LootClass = "Residential"; }; 
+  case "LAND_kanovka_budova": {_LootClass = "Industrial"; }; 
+  case "LAND_kanovka_budova_snich": {_LootClass = "Industrial"; };
+  case "LAND_HouseV_2I_snow": {_LootClass = "Residential"; }; 
+  case "LAND_bouda1_zima": {_LootClass = "Residential"; };
+  case "LAND_kasarna_brana": {_LootClass = "Military"; }; 
+  case "LAND_kasarna": {_LootClass = "Military"; }; 
+  case "LAND_kasarna_prujezd": {_LootClass = "Military"; }; 
+  case "LAND_kasarna_rohova": {_LootClass = "Military"; }; 
+  case "LAND_watertower1": {_LootClass = "Residential"; }; 
+  case "OSShDY_base": {_LootClass = "Residential"; }; 
+  case "CD2": {_LootClass = "Residential"; };
+  case "Ds": {_LootClass = "Residential"; }; 
+  case "Land_afbarabizna": {_LootClass = "Residential"; }; 
+  case "Land_fuelstation_army": {_LootClass = "Military"; }; 
+  case "Land_army_hut_int": {_LootClass = "Military"; }; 
+  case "Land_army_hut3_long_int": {_LootClass = "Military"; }; 
+  case "Land_army_hut2_int": {_LootClass = "Military"; }; 
+  case "Land_cihlovej_dum_in": {_LootClass = "Residential"; }; 
+  case "Land_dum_mesto_in": {_LootClass = "Residential"; };
+  case "Land_sara_Domek_sedy": {_LootClass = "Residential"; }; 
+  case "Land_hruzdum": {_LootClass = "Residential"; }; 
+  case "Land_tovarna1": {_LootClass = "Industrial"; }; 
+  case "Land_ryb_domek": {_LootClass = "Residential"; }; 
+  case "Land_benzina_schnell": {_LootClass = "Industrial"; }; 
+  case "Land_deutshe_mini": {_LootClass = "Residential"; }; 
+  case "Land_sara_stodola": {_LootClass = "Farm"; }; 
+  case "Land_hut01": {_LootClass = "Residential"; };
+    case "Land_hut02": {_LootClass = "Residential"; }; 
+    case "Land_hut04": {_LootClass = "Residential"; }; 
+    case "Land_hut03": {_LootClass = "Residential"; }; 
+    case "Land_hut_old02": {_LootClass = "Industrial"; }; 
+    case "Land_dum_rasovna": {_LootClass = "Residential"; }; 
+    case "Land_dum_istan3_pumpa": {_LootClass = "Residential"; }; 
+    case "Land_dum_istan3_hromada2": {_LootClass = "Residential"; }; 
+    case "Land_fuelstation": {_LootClass = "Industrial"; };
+    case "Land_chilovej_dum_mini": {_LootClass = "Residential"; }; 
+    case "Land_dum_mesto2": {_LootClass = "Residential"; };
+    case "Land_hut06": {_LootClass = "Residential"; }; 
+    case "Land_stodola_old_open": {_LootClass = "Farm"; }; 
+    case "Land_Farm_Cowshed_a": {_LootClass = "Farm"; }; 
+    case "Land_stodola_open": {_LootClass = "Farm"; }; 
+    case "Land_Barn_W_01": {_LootClass = "Farm; }; 
+    case "Land_Shed_wooden": {_LootClass = "Residential"; }; 
+    case "Land_HouseV_1I1": {_LootClass = "Residential"; }; 
+    case "Land_rail_station_big": {_LootClass = "Residential"; }; 
+    case "Land_Ind_Vysypka": {_LootClass = "Industrial"; }; 
+    case "Land_Church_02": {_LootClass = "Residential; }; 
+    case "Land_Church_02a": {_LootClass = "Residential"; }; 
+    case "Land_Church_05R": {_LootClass = "Residential"; };
+    case "Land_Mil_Barracks": {_LootClass = "Military"; }; 
+    case "Land_Mil_Barracks_L": {_LootClass = "Military"; };
+    case "Land_Barn_W_02": {_LootClass = "Farm"; }; 
+    case "Land_HouseV_3I4": {_LootClass = "Residential"; }; 
+    case "Land_Shed_W4": {_LootClass = "Residential"; };
+    case "Land_HouseV_3I1": {_LootClass = "Residential"; };
+    case "Land_HouseV_1L2": {_LootClass = "Residential"; };
+    case "Land_HouseV_1T": {_LootClass = "Residential"; }; 
+    case "Land_telek1": {_LootClass = "Industrial"; }; 
+    case "Land_HouseV_2I": {_LootClass = "Industrial"; }; 
+    case "UH1Wreck_DZ": {_LootClass = "Military"; }; 
+    case "Ural_OpenWreck_DZ": {_LootClass = "TavianaDZ"; }; 
+    case "Land_Ind_Shed_02_main": {_LootClass = "Industrial"; };     
+  case "Land_HouseV_1I4": { _LootClass = "Residential"; };
+  case "Land_kulna": { _LootClass = "Residential"; };
+  case "Land_Ind_Workshop01_04": { _LootClass = "Residential"; };
+  case "Land_hut06": { _LootClass = "Residential"; };
+  case "Land_Hlidac_budka": { _LootClass = "Residential"; };
+  case "Land_HouseV2_02_Interier": { _LootClass = "Residential"; };
+  case "Land_A_Pub_01": { _LootClass = "Residential"; };
+  case "Land_Shed_wooden": { _LootClass = "Residential"; };
+  case "Land_HouseBlock_A1_1": { _LootClass = "Residential"; };
+  case "Land_A_MunicipalOffice": { _LootClass = "Residential"; };
+  case "Land_ruin_01": { _LootClass = "Residential"; };
+  case "Land_HouseV2_04_interier": { _LootClass = "Residential"; };
+  case "Land_HouseV2_01A": { _LootClass = "Residential"; };
+  case "Land_psi_bouda": { _LootClass = "Residential"; };
+  case "Land_KBud": { _LootClass = "Residential"; };
+  case "Land_A_Castle_Bergfrit": { _LootClass = "Residential"; };
+  case "Land_A_Castle_Stairs_A": { _LootClass = "Residential"; };
+  case "Land_A_Castle_Gate": { _LootClass = "Residential"; };
+  case "Land_sara_domek_zluty": { _LootClass = "Residential"; };
+  case "Land_Church_01": { _LootClass = "Residential"; };
+  case "Land_Church_03": { _LootClass = "Residential"; };
+  case "Land_HouseB_Tenement": { _LootClass = "Residential"; };
+  case "Land_Panelak": { _LootClass = "Residential"; };
+  case "Land_Panelak2": { _LootClass = "Residential"; };
+  case "Land_rail_station_big": { _LootClass = "Residential"; };
+  case "Land_A_Office01": { _LootClass = "Residential"; };
+  case "Land_A_Office02": { _LootClass = "Residential"; };
+  case "Land_Ind_Workshop01_01": { _LootClass = "Industrial"; };
+  case "Land_Ind_Garage01": { _LootClass = "Industrial"; };
+  case "Land_Ind_Workshop01_02": { _LootClass = "Industrial"; };
+  case "Land_Ind_Workshop01_L": { _LootClass = "Industrial"; };
+  case "Land_Hangar_2": { _LootClass = "Industrial"; };
+  case "Land_A_FuelStation_Build": { _LootClass = "Industrial"; };
+  case "Land_Shed_Ind02": { _LootClass = "Industrial"; };
+  case "Land_Misc_PowerStation": { _LootClass = "Industrial"; };
+  case "Land_Shed_W01": { _LootClass = "Industrial"; };
+  case "Land_Tovarna2": { _LootClass = "Industrial"; };
+  case "Land_Ind_Vysypka": { _LootClass = "Industrial"; };
+  case "Land_A_BuildingWIP": { _LootClass = "Industrial"; };
+  case "Land_A_TVTower_Base": { _LootClass = "Industrial"; };
+  case "Land_Misc_Cargo1Ao": { _LootClass = "Industrial"; };
+  case "Land_Misc_Cargo1Bo": { _LootClass = "Industrial"; };
+  case "Land_Nav_Boathouse": { _LootClass = "Industrial"; };
+  case "Land_wagon_box": { _LootClass = "Industrial"; };
+  case "Land_Rail_House_01": { _LootClass = "Industrial"; };
+  case "Land_A_GeneralStore_01a": { _LootClass = "Supermarket"; };
+  case "Land_A_GeneralStore_01": { _LootClass = "Supermarket"; };
+  case "Land_A_Hospital": { _LootClass = "Hospital"; };
+  case "MASH": { _LootClass = "Hospital"; };
+  case "MASH_EP1": { _LootClass = "Hospital"; };
+  case "USMC_WarfareBFieldhHospital": { _LootClass = "Hospital"; };
+  case "Land_a_stationhouse": { _LootClass = "Military"; };  //Changed to special Tavi loot
+  case "Land_Mil_ControlTower": { _LootClass = "Military"; };
+  case "Land_SS_hangar": { _LootClass = "Military"; };
+  case "Land_Mil_House": { _LootClass = "Military"; };
+  case "Camp": { _LootClass = "Military"; };
+  case "CampEast": { _LootClass = "Military"; };
+  case "CampEast_EP1": { _LootClass = "Military"; };
+  case "Land_Mil_Barracks_i": { _LootClass = "MilitarySpecial"; };
+  case "Land_Misc_deerstand": { _LootClass = "Hunting"; };
+  default { _LootClass = "Residential"; };
+};
+
+switch (_LootClass) do { //Find correct loot
+  case "Residential": {
+  	_itemTypes = [
+  		["ItemSodaMdew","magazine"],
+  		["ItemWatch","generic"],
+  		["ItemCompass","generic"],
+  		["ItemMap","weapon"],
+  		["Makarov","weapon"],
+  		["Colt1911","weapon"],
+  		["ItemFlashlight","generic"],
+  		["ItemKnife","generic"],
+  		["ItemMatchbox","generic"],
+  		["","generic"],
+  		["LeeEnfield","weapon"],
+  		["revolver_EP1","weapon"],
+  		
+  		["DZ_Assault_Pack_EP1","object"], // 12
+  		["DZ_Czech_Vest_Puch","object"], // 12-0
+  		["DZ_ALICE_Pack_EP1","object"], // 16
+  		["DZ_TK_Assault_Pack_EP1","object"], // 16
+  		["DZ_British_ACU","object"], // 18
+  		
+  		["Winchester1866","weapon"],
+  		["WeaponHolder_ItemTent","object"],
+  		["","military"],
+  		["","trash"],
+  		["Crossbow_DZ","weapon"],
+  		["Binocular","weapon"],
+  		["PartWoodPile","magazine"],
+  		["Skin_Camo1_DZ","magazine"],
+  		["Skin_Sniper1_DZ","magazine"],
+  		["WeaponHolder_ItemCrowbar","object"],
+  		["MR43","weapon"] // Remember the last object doesn't not need a comma
+  	 ];
+  	_itemChance = [
+  		0.01,
+  		0.15,
+  		0.05,
+  		0.03,
+  		0.13,
+  		0.05,
+  		0.03,
+  		0.08,
+  		0.06,
+  		2,
+  		0.06,
+  		0.04,
+  		0.05, //12
+  		0.04, // 12-0
+  		0.02, //16
+  		0.02, //16
+  		0.01, //18
+  		0.01,
+  		0.01,
+  		0.03,
+  		0.5,
+  		0.01,
+  		0.06,
+  		0.06,
+  		0.01,
+  		0.01,
+  		0.08,
+  		0.03
+  	];
+  };
+  case "Farm": {
+      _itemTypes = [
+  	    ["WeaponHolder_ItemJerrycan","object"],
+  		["","generic"],
+  		["huntingrifle","weapon"],
+  		["LeeEnfield","weapon"]
+  		["Winchester1866","weapon"],
+  		["","trash"],
+  		["Crossbow","weapon"],
+  		["PartWoodPile","magazine"],
+  		["WeaponHolder_ItemHatchet","object"],
+  		["MR43","weapon"],
+  		["TrapBear","magazine"],
+  		["WeaponHolder_ItemTentDZ","object"]
+  	];
+  	_itemChance = [
+  	    0.06,
+  		0.28,
+  		0.01,
+  		0.04,
+  		0.03,
+  		0.22,
+  		0.03,
+  		0.11,
+  		0.17,
+  		0.06,
+  		0.01,
+  		0.01
+  	];
+  };
+  case "Industrial": {
+  	_itemTypes = [
+  		["","generic"],
+  		["","trash"],
+  		["","military"],
+  		["WeaponHolder_PartGeneric","object"],
+  		["WeaponHolder_PartWheel","object"],
+  		["WeaponHolder_PartFueltank","object"],
+  		["WeaponHolder_PartEngine","object"],
+  		["WeaponHolder_PartGlass","object"],
+  		["WeaponHolder_PartVRotor","object"],
+  		["WeaponHolder_ItemJerrycan","object"],
+  		["WeaponHolder_ItemHatchet","object"],
+  		["ItemKnife","military"],
+  		["ItemToolbox","weapon"],
+  		["ItemWire","magazine"],
+  		["ItemTankTrap","magazine"]
+  	];
+  	_itemChance = [
+  		0.18,
+  		0.29,
+  		0.04,
+  		0.04,
+  		0.05,
+  		0.02,
+  		0.02,
+  		0.04,
+  		0.01,
+  		0.04,
+  		0.11,
+  		0.07,
+  		0.06,
+  		0.01,
+  		0.04
+  	];
+  };
+  case "Farm": {
+  	_itemTypes = [
+  		["WeaponHolder_ItemJerrycan","object"],
+  		["","generic"],
+  		["huntingrifle","weapon"],
+  		["LeeEnfield","weapon"],
+  		["Winchester1866","weapon"],
+  		["","trash"],
+  		["Crossbow_DZ","weapon"],
+  		["PartWoodPile","magazine"],
+  		["WeaponHolder_ItemHatchet","object"],
+  		["MR43","weapon"],
+  		["WeaponHolder_ItemMachete","object"]
+  	];
+  	_itemChance = [
+  		0.06,
+  		0.28,
+  		0.01,
+  		0.04,
+  		0.03,
+  		0.22,
+  		0.03,
+  		0.11,
+  		0.17,
+  		0.06,
+  		0.03
+  	];
+  };
+  case "Supermarket": {
+  	_itemTypes = [
+  		["ItemWatch","generic"],
+  		["ItemCompass","generic"],
+  		["ItemMap","weapon"],
+  		["Makarov","weapon"],
+  		["Colt1911","weapon"],
+  		["ItemFlashlight","generic"],
+  		["ItemKnife","generic"],
+  		["ItemMatchbox","generic"],
+  		["","generic"],
+  		["LeeEnfield","weapon"],
+  		["revolver_EP1","weapon"],
+  				
+  		["DZ_Assault_Pack_EP1","object"], // 12
+  		["DZ_Czech_Vest_Puch","object"], // 12-0
+  		["DZ_ALICE_Pack_EP1","object"], // 16
+  		["DZ_TK_Assault_Pack_EP1","object"], // 16
+  		["DZ_British_ACU","object"], // 18
+  		
+  		["Winchester1866","weapon"],
+  		["WeaponHolder_ItemTent","object"],
+  		["","food"],
+  		["","trash"],
+  		["Crossbow_DZ","weapon"],
+  		["Binocular","weapon"],
+  		["PartWoodPile","magazine"],
+  		["MR43","weapon"]
+  	];
+  	_itemChance = [
+  		0.15,
+  		0.01,
+  		0.05,
+  		0.02,
+  		0.02,
+  		0.05,
+  		0.02,
+  		0.05,
+  		0.05,
+  		0.01,
+  		0.01,
+  		0.05, //12
+  		0.04, // 12-0
+  		0.02, //16
+  		0.02, //16
+  		0.01, //18
+  		0.01,
+  		0.01,
+  		0.3,
+  		0.15,
+  		0.01,
+  		0.05,
+  		0.02,
+  		0.01
+  	];
+  };
+  case "Hospital": {
+  	_itemTypes =	[
+  		["","trash"],
+  		["","hospital"],
+  		["MedBox0","object"]
+  	];
+  	_itemChance = [
+  		0.2,
+  		1,
+  		0.2
+  	];
+  };
+  case "Military": {
+  	_itemTypes = [
+  		["M9","weapon"],
+  		["M16A2","weapon"],
+  		["M16A2GL","weapon"],
+  		["M9SD","weapon"],
+  		["AK_74","weapon"],
+  		["M4A1_Aim","weapon"],
+  		["AKS_74_kobra","weapon"],
+  		["AKS_74_U","weapon"],
+  		["AK_47_M","weapon"],
+  		["M24","weapon"],
+  		["M1014","weapon"],
+  		["DMR","weapon"],
+  		["M4A1","weapon"],
+  		["M14_EP1","weapon"],
+  		["UZI_EP1","weapon"],
+  		["Remington870_lamp","weapon"],
+  		["glock17_EP1","weapon"],
+  		["MP5A5","weapon"],
+  		["MP5SD","weapon"],
+  		["M4A3_CCO_EP1","weapon"],
+  		["Binocular","weapon"],
+  		["ItemFlashlightRed","military"],
+  		["ItemKnife","military"],
+  		["ItemGPS","weapon"],
+  		["ItemMap","military"],
+  		
+  		["DZ_ALICE_Pack_EP1","object"], // 16
+  		["DZ_TK_Assault_Pack_EP1","object"], // 16
+  		["DZ_British_ACU","object"], // 18
+  		["DZ_CivilBackpack_EP1","object"], // 24
+  		["DZ_Backpack_EP1","object"], // 24
+  		
+  		//Normal
+  		["","medical"],
+  		["","generic"],
+  		["","military"],
+  		//["Body","object"],
+  		["ItemEtool","weapon"],
+  		["ItemSandbag","magazine"],
+  		["Sa58P_EP1","weapon"],
+  		["Sa58V_EP1","weapon"],
+  		["BAF_L85A2_RIS_Holo","weapon"]
+  	];
+  	_itemChance = [
+  		0.05,
+  		0.05,
+  		0.01,
+  		0.02,
+  		0.15,
+  		0.01,
+  		0.08,
+  		0.05,
+  		0.05,
+  		0.01,
+  		0.10,
+  		0.01,
+  		0.02,
+  		0.01,
+  		0.05,
+  		0.08,
+  		0.10,
+  		0.04,
+  		0.02,
+  		0.01,
+  		0.06,
+  		0.10,
+  		0.10,
+  		0.01,
+  		0.05,
+  		//Bags
+  		0.08, //16
+  		0.08, //16
+  		0.06, //18
+  		0.01, //24
+  		0.01, //DZ_Backpack_EP1 24
+  		0.10, 
+  		1.00,
+  		2.50,
+  		//0.20,
+  		0.05,
+  		0.02,
+  		0.03,
+  		0.03,
+  		0.01
+  	];
+  };
+  case "TavianaDZ":
+      _itemTypes = [
+  	    ["AK_74","weapon"],
+  		["AKS_74","weapon"],
+  		["AK_74_GL","weapon"],
+  		["AK_74_GL_kobra","weapon"],
+  		["AK_107_kobra","weapon"],
+  		["AK_107_GL_kobra","weapon"],
+  		["AK_107_pso","weapon"],
+  		["AKS_74_kobra","weapon"],
+  		["AKS_74_pso","weapon"],
+  		["AKS_74_UN_kobra","weapon"],
+  		["Pecheneg_DZ","weapon"],
+  		["VSS_vintorez","weapon"],
+  		["SVD_NSPU_EP1","weapon"],
+  		["bizon","weapon"],
+  		["M249_EP1_DZ","weapon"],
+  		["M60A4_EP1_DZ","weapon"],
+  		["MakarovSD","weapon"],
+  		["M4SPR","weapon"],
+  		["Sa58V_RCO_EP1","weapon"],
+  		["Sa58V_CCO_EP1","weapon"],
+  		["M16A4_GL","weapon"],
+  		["M16A4_ACG_GL","weapon"],
+  		["M4A1_Aim_camo","weapon"],
+  		["RPK_74","weapon"],
+  		["M4A1_RCO_GL","weapon"],
+  		["M4A1_HWS_GL_SD_Camo","weapon"],
+  		["M4A1_HWS_GL","weapon"],
+  		["m16a4","weapon"],
+  		["AK_47_S","weapon"],
+  		["SVD","weapon"],
+  		["M4A3_RCO_GL_EP1","weapon"],
+  		["PK_DZ","weapon"],
+  		["","trash"],
+  		["","medical"],
+  		["DZ_Assault_Pack_EP1","object"],
+  		["DZ_Patrol_Pack_EP1","object"],
+  		["DZ_Backpack_EP1","object"],
+  		["ItemFlashlightRed","military"],
+  		["ItemFlashlightRed","military"],
+  		["ItemKnife","military"],
+  		["ItemGPS","weapon"],
+  		["","generic"]
+  	];
+  	_itemChance = [
+  	    0.10,	//AK_74
+  		0.10,	//AKS_74
+  		0.04,	//AK_74_GL
+  		0.04,	//AK_74_GL_kobra
+  		0.03,	//AK_107_kobra
+  		0.03,	//AK_107_GL_kobra
+  		0.01,	//AK_107_pso
+  		0.03, 	//AKS_74_kobra
+  		0.02,	//AKS_74_pso
+  		0.03,	//AKS_74_UN_kobra
+  		0.05,	//Pecheneg_DZ
+  		0.03,	//VSS_vintorez
+  		0.02,	//SVD_NSPU_EP1
+  		0.04,	//bizon
+  		0.04,	//M249_EP1 
+  		0.02,	//M60A4_EP1
+  		0.05,	//MakarovSD
+  		0.02,	//M4SPR
+  		0.03,	//Sa58V_RCO_EP1
+  		0.03,	//Sa58V_CCO_EP1
+  		0.03,	//M16A4_GL
+  		0.02,	//M16A4_ACG_GL
+  		0.03,	//M4A1_Aim_camo
+  		0.05,	//RPK_74
+  		0.03,	//M4A1_RCO_GL
+  		0.02,	//M4A1_HWS_GL_SD_Camo
+  		0.03,	//M4A1_HWS_GL
+  		0.05,	//m16a4
+  		0.05,	//AK_47_S
+  		0.02,	//SVD
+  		0.03,	//M4A3_RCO_GL_EP1
+  		0.04,	//PK
+  		1.60,	//trash
+  		0.30,	//medical
+  		0.01,	//DZ_Assault_Pack_EP1
+  		0.05,	//DZ_Patrol_Pack_EP1
+  		0.06,	//DZ_Backpack_EP1
+  		0.04,	//ItemFlashlightRed
+  		0.02,	//ItemKnife
+  		0.05,	//ItemGPS
+  		1.80	//generic41
+  	];
+  };
+  case "MilitarySpecial": {
+  	_itemTypes = [
+  		["M16A2","weapon"],
+  		["M16A2GL","weapon"],
+  		["M249_DZ","weapon"],
+  		["M9SD","weapon"],
+  		//["M136","weapon"],
+  		["AK_74","weapon"],
+  		["M4A1_Aim","weapon"],
+  		["AKS_74_kobra","weapon"],
+  		["AKS_74_U","weapon"],
+  		["AK_47_M","weapon"],
+  		["M24","weapon"],
+  		["SVD_CAMO","weapon"],
+  		["M1014","weapon"],
+  		//["M107_DZ","weapon"], // Removed by mod authors
+  		//["DMR","weapon"], // Removed by mod authors
+  		["M4A1","weapon"],
+  		["M14_EP1","weapon"],
+  		["UZI_EP1","weapon"],
+  		["Remington870_lamp","weapon"],
+  		["glock17_EP1","weapon"],
+  		["M240_DZ","weapon"],
+  		["M4A1_AIM_SD_camo","weapon"],
+  		["M16A4_ACG","weapon"],
+  		["M4A1_HWS_GL_camo","weapon"],
+  		["Mk_48_DZ","weapon"],
+  		["M4A3_CCO_EP1","weapon"],
+  		//Ammo
+  		["AmmoBoxSmall_556","object"],
+  		["AmmoBoxSmall_762","object"],
+
+  		//["NVGoggles","weapon"],
+  		["Binocular","weapon"],
+  		["ItemFlashlightRed","military"],
+  		["ItemKnife","military"],
+  		["ItemGPS","weapon"],
+  		["ItemMap","military"],
+  		["Binocular_Vector","military"],
+
+  		["DZ_ALICE_Pack_EP1","object"], // 16
+  		["DZ_TK_Assault_Pack_EP1","object"], // 16
+  		["DZ_British_ACU","object"], // 18
+  		["DZ_CivilBackpack_EP1","object"], // 24
+  		["DZ_Backpack_EP1","object"], // 24		
+
+  		["","medical"],
+  		["","generic"],
+  		["","military"],
+  		//["Body","object"],
+  		["PipeBomb","magazine"],
+  		["Sa58V_RCO_EP1","weapon"],
+  		["Sa58V_CCO_EP1","weapon"],
+  		["G36_C_SD_camo","weapon"], // 
+  		["M40A3","weapon"],
+  		["100Rnd_762x54_PK","magazine"]
+  	];
+  	_itemChance = [
+  		0.10,
+  		0.05,
+  		0.01,
+  		0.02,
+  		//0.01, //m136
+  		0.10,
+  		0.02,
+  		0.10,
+  		0.10,
+  		0.10,
+  		0.01,
+  		0.01,
+  		0.20,
+  		0.01,
+  		0.02,
+  		0.10,
+  		0.03,
+  		0.20,
+  		0.10,
+  		0.20,
+  		0.01,
+  		0.04,
+  		0.05,
+  		0.02,
+  		0.01,
+  		0.08,
+  		0.04,
+  		0.02,
+  		//0.01, //NVGoggles
+  		0.10,
+  		0.05,
+  		0.15,
+  		0.01, //ItemGPS
+  		0.03,
+  		0.01,
+  		//Bags
+  		0.08, //16
+  		0.08, //16
+  		0.06, //18
+  		0.01, //24
+  		0.01, //DZ_Backpack_EP1 24
+  		0.30,
+  		1.00,
+  		5.00, //military
+  		//0.20,
+  		0.01, //PipeBomb
+  		0.01, //Sa58V_RCO_EP1
+  		0.01, //Sa58V_CCO_EP1
+  		//0.01, //["G36_C_SD_camo","weapon"],
+  		0.02, // M40A3
+  		0.01	//["100Rnd_762x54_PK","magazine"]
+  	];
+  };
+  case "Hunting": {
+  	_itemTypes = [
+  		["ItemMap","weapon"],
+  		["ItemFlashlight","generic"],
+  		["ItemKnife","generic"],
+  		["ItemMatchbox","generic"],
+  		["Crossbow_DZ","weapon"],
+  		["","military"],
+  		["WeaponHolder_ItemMachete", "object"],
+  		["huntingrifle","weapon"],
+  		["","hunter"]
+  	];
+  	_itemChance = [
+  		0.08,
+  		0.05,
+  		0.04,
+  		0.06,
+  		0.03,
+  		2.00,
+  		0.03,
+  		0.04,
+  		3.00
+  	];
+  };
+};
+//------------------//
+//CUSTOM LOOT SPAWNS//
+//------------------//
+{
+  if ((random 1) < _lootChance) then {
+  	_iPos = _obj modelToWorld _x;
+  	_nearBy = nearestObjects [_iPos, ["WeaponHolder","WeaponHolderBase"], 1];
+  	if (count _nearBy == 0) then {
+  		private["_index"];
+  		_weights = [_itemTypes,_itemChance] call fnc_buildWeightedArray;
+  		_index = _weights call BIS_fnc_selectRandom;
+  		_itemType = _itemTypes select _index;
+  		[_itemType select 0, _itemType select 1 , _iPos, 0.0]  call spawn_loot;
+  	};
+  };
+} forEach _positions;
