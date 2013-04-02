@@ -50,7 +50,7 @@ switch (_type) do { //Assign building classes
     case "LAND_dum_patrovy03": {_LootClass = "Residential"; }; 
     case "LAND_Cinzak_long": {_LootClass = "Residential"; };
     case "LAND_Cinzak_corner2": {_LootClass = "Residential"; };
-    case "LAND_Cinzak_long_centr": {LootClass = "Residential"; }; 
+    case "LAND_Cinzak_long_centr": {_LootClass = "Residential"; }; 
     case "LAND_Cinzak_corner": {_LootClass = "Residential"; ";
     case "LAND_Cinzak_long_double": {_LootClass = "Residential"; }; 
     case "LAND_hospoda": {_LootClass = "Residential"; }; 
@@ -124,7 +124,7 @@ switch (_type) do { //Assign building classes
     case "Land_HouseV_1I1": {_LootClass = "Residential"; }; 
     case "Land_rail_station_big": {_LootClass = "Residential"; }; 
     case "Land_Ind_Vysypka": {_LootClass = "Industrial"; }; 
-    case "Land_Church_02": {_LootClass = "Residential; }; 
+    case "Land_Church_02": {_LootClass = "Residential"; }; 
     case "Land_Church_02a": {_LootClass = "Residential"; }; 
     case "Land_Church_05R": {_LootClass = "Residential"; };
     case "Land_Mil_Barracks": {_LootClass = "Military"; }; 
