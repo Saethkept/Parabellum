@@ -191,14 +191,14 @@ switch (_type) do { //Assign building classes
     case "MASH": { _LootClass = "Hospital"; };
     case "MASH_EP1": { _LootClass = "Hospital"; };
     case "USMC_WarfareBFieldhHospital": { _LootClass = "Hospital"; };
-    case "Land_a_stationhouse": { _LootClass = "MilitarySpecial"; }; //Changed from Mil to MilSpecial  
+    case "Land_a_stationhouse": { _LootClass = "Military"; };   
     case "Land_Mil_ControlTower": { _LootClass = "Military"; };
     case "Land_SS_hangar": { _LootClass = "Military"; };
     case "Land_Mil_House": { _LootClass = "Military"; };
     case "Camp": { _LootClass = "Military"; };
     case "CampEast": { _LootClass = "Military"; };
     case "CampEast_EP1": { _LootClass = "Military"; };
-    case "Land_Mil_Barracks_i": { _LootClass = "TavianaDZ"; };  //Changed from MilSpecial to TavianaDZ
+    case "Land_Mil_Barracks_i": { _LootClass = "MilitarySpecial"; };  
     case "Land_Misc_deerstand": { _LootClass = "Military"; };
     default { _LootClass = "Residential"; };
 };
