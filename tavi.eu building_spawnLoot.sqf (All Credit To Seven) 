@@ -707,3 +707,5 @@ switch (_LootClass) do { //Find correct loot
     	};
     };
 } forEach _positions;
+
+
