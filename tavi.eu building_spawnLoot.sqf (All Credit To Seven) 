@@ -495,7 +495,7 @@ switch (_LootClass) do { //Find correct loot
     		0.01
     	];
     };
-    case "TavianaDZ":
+    case "TavianaDZ": {
         _itemTypes = [
     	    ["AK_74","weapon"],
     		["AKS_74","weapon"],
